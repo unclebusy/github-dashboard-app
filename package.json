@@ -10,6 +10,9 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.25.1",
@@ -20,7 +23,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "node server.js"
   },
   "eslintConfig": {
     "extends": [

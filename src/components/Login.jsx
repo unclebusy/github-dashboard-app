@@ -1,11 +1,9 @@
 import React from 'react';
 import { Button, Container, Typography, Box } from '@mui/material';
-
-const clientId = 'Ov23liNCaE4oo7EGfH0D';
-const redirectUri = 'http://localhost:3000/oauth/callback';
+import {CLIENT_ID, REDIRECT_URI} from "../config";
 
 const loginWithGitHub = () => {
-  window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user,repo`;
+  window.location.href = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=user,repo`;
 };
 
 const Login = () => {
