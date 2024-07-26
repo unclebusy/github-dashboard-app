@@ -16,7 +16,6 @@ const fetchAccessToken = async (code, navigate) => {
     navigate('/profile');
   } catch (error) {
     console.error('Error fetching access token:', error);
-    // Добавьте обработку ошибок для уведомления пользователя
   }
 };
 
