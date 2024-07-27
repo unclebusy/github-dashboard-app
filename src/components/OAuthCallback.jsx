@@ -1,13 +1,25 @@
 import React, { useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const oAuthUrl = 'http://localhost:4000/authenticate';
+const clientId = process.env.REACT_APP_CLIENT_ID;
+const redirectUri = process.env.REACT_APP_REDIRECT_URI;
 
 const fetchAccessToken = async (code, navigate) => {
   try {
-    const response = await axios.post(oAuthUrl, { code });
-    localStorage.setItem('access_token', response.data.access_token);
+    const response = await fetch('http://localhost:4000/authenticate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ code })
+    });
+
+    if (!response.ok) {
+      throw new Error('Error fetching access token');
+    }
+
+    const data = await response.json();
+    localStorage.setItem('access_token', data.access_token);
     navigate('/profile');
   } catch (error) {
     console.error('Error fetching access token: ', error);
@@ -21,10 +33,14 @@ const OAuthCallback = () => {
     const code = new URLSearchParams(window.location.search).get('code');
     if (code) {
       fetchAccessToken(code, navigate);
+    } else {
+      window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user`;
     }
   }, [navigate]);
+
 
   return <div>Loading...</div>;
 };
 
 export default OAuthCallback;
+
