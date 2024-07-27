@@ -1,21 +1,16 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const oAuthUrl = 'http://localhost:4000/authenticate';
 
 const fetchAccessToken = async (code, navigate) => {
   try {
-    const response = await axios.get('http://localhost:5000/auth/github', {
-      params: { code },
-      headers: {
-        'Accept': 'application/json',
-      },
-    });
-
-    const token = response.data.access_token;
-    localStorage.setItem('access_token', token);
+    const response = await axios.post(oAuthUrl, { code });
+    localStorage.setItem('access_token', response.data.access_token);
     navigate('/profile');
   } catch (error) {
-    console.error('Error fetching access token:', error);
+    console.error('Error fetching access token: ', error);
   }
 };
 
@@ -33,4 +28,3 @@ const OAuthCallback = () => {
 };
 
 export default OAuthCallback;
-
