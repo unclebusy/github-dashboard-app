@@ -59,7 +59,7 @@ const ModalEditProfile = ({ open, handleClose, editedProfile, setEditedProfile, 
               onChange={(e) => setEditedProfile({ ...editedProfile, bio: e.target.value })}
           />
           <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
-            <Button variant="contained" color="primary" onClick={handleSaveProfile}>
+            <Button variant="contained" color="success" onClick={handleSaveProfile}>
               Save
             </Button>
             <Button variant="outlined" color="error" onClick={handleClose}>
