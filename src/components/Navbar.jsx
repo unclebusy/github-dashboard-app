@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import {Avatar, Button} from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import axios from "axios";
 
 const fetchProfileAvatar = async () => {
@@ -82,15 +82,16 @@ export default function MenuAppBar() {
                 color="inherit"
                 aria-label="menu"
                 sx={{ mr: 0 }}
+                onClick={() => navigate('/')}
             >
-              <GitHubIcon onClick={() => navigate('/')}/>
+              <GitHubIcon />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               GitHub Dashboard
             </Typography>
             {auth && (
                 <>
-                  <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                  <Box sx={{ display: { xs: 'none', sm: 'block' }, marginRight: '1rem' }}>
                     {navItems.map((item) => (
                         <Button
                             key={item}
@@ -101,14 +102,15 @@ export default function MenuAppBar() {
                         </Button>
                     ))}
                   </Box>
-                    <Avatar alt="Avatar" src={avatar} size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleMenu}
-                            color="inherit"/>
+                  <Avatar alt="Avatar" src={avatar} size="large"
+                          aria-label="account of current user"
+                          aria-controls="menu-appbar"
+                          aria-haspopup="true"
+                          onClick={handleMenu}
+                          color="inherit"/>
                   <Menu
                       id="menu-appbar"
+                      anchorEl={anchorEl} // исправлено: передача anchorEl
                       anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',

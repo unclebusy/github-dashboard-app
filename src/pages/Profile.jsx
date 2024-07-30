@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Typography, Avatar, Link, Box, Paper, Button, Tooltip } from '@mui/material';
+import {Container, Typography, Avatar, Link, Box, Paper, Button, Tooltip, CircularProgress} from '@mui/material';
 import { Email as EmailIcon, Business as BusinessIcon, LocationOn as LocationOnIcon, AccountBox as AccountBoxIcon, Description as DescriptionIcon, Link as LinkIcon, EditNote as EditNoteIcon } from '@mui/icons-material';
 import ModalEditProfile from "../components/ModalEditProfile";
 
@@ -29,14 +29,19 @@ const InfoItem = ({ title, icon: Icon, value }) => (
 );
 
 const Profile = () => {
-  const [profile, setProfile] = useState({});
+  const [profile, setProfile] = useState(null);
   const [open, setOpen] = useState(false);
   const [editedProfile, setEditedProfile] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchProfile().then(data => setProfile(data));
-  }, []);
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      navigate('/');
+    } else {
+      fetchProfile().then(data => setProfile(data));
+    }
+  }, [navigate]);
 
   const handleEditProfile = () => {
     setEditedProfile(profile);
@@ -51,6 +56,14 @@ const Profile = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  if (!profile) {
+    return (
+        <Container maxWidth="sm" sx={{ display: 'flex', height: 'calc(100vh - 64px)', alignItems: 'center', justifyContent: 'center' }}>
+          <CircularProgress />
+        </Container>
+    );
+  }
 
   return (
       <>
@@ -85,7 +98,7 @@ const Profile = () => {
                   </Box>
                 </Tooltip>
                 <Box display="flex" alignItems="flex-end">
-                  <Tooltip title="Edit account" placement="left-start">
+                  <Tooltip title="Edit profile" placement="left-start">
                     <Button variant="contained" color="primary" onClick={handleEditProfile}>
                       <EditNoteIcon />
                     </Button>
