@@ -83,7 +83,7 @@ export default function MenuAppBar() {
                 aria-label="menu"
                 sx={{ mr: 0 }}
             >
-              <GitHubIcon />
+              <GitHubIcon onClick={() => navigate('/')}/>
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               GitHub Dashboard

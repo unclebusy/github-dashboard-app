@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import {CircularProgress, Container} from "@mui/material";
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 const redirectUri = process.env.REACT_APP_REDIRECT_URI;
@@ -39,7 +40,11 @@ const OAuthCallback = () => {
   }, [navigate]);
 
 
-  return <div>Loading...</div>;
+  return (
+      <Container maxWidth="sm" sx={{ display: 'flex', height: 'calc(100vh - 64px)', alignItems: 'center', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Container>
+      );
 };
 
 export default OAuthCallback;
