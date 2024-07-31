@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {Container, Typography, Avatar, Link, Box, Paper, Button, Tooltip, CircularProgress} from '@mui/material';
+import { Container, Typography, Avatar, Link, Box, Paper, Button, Tooltip, CircularProgress } from '@mui/material';
 import { Email as EmailIcon, Business as BusinessIcon, LocationOn as LocationOnIcon, AccountBox as AccountBoxIcon, Description as DescriptionIcon, Link as LinkIcon, EditNote as EditNoteIcon } from '@mui/icons-material';
 import ModalEditProfile from "../components/ModalEditProfile";
 
@@ -97,20 +97,12 @@ const Profile = () => {
                     </Link>
                   </Box>
                 </Tooltip>
-                <Box display="flex" alignItems="flex-end">
+                <Box display="flex" justifyContent="flex-end" sx={{ marginTop: 2 }}>
                   <Tooltip title="Edit profile" placement="left-start">
                     <Button variant="contained" color="primary" onClick={handleEditProfile}>
                       <EditNoteIcon />
                     </Button>
                   </Tooltip>
-                  <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => navigate('/repositories')}
-                      sx={{ marginLeft: 'auto' }}
-                  >
-                    Repositories
-                  </Button>
                 </Box>
               </Box>
             </Box>

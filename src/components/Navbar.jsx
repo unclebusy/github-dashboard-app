@@ -13,20 +13,22 @@ import axios from "axios";
 
 const fetchProfileAvatar = async () => {
   const token = localStorage.getItem('access_token');
+  if (!token) return '';
+
   try {
     const response = await axios.get('https://api.github.com/user', {
       headers: {
         Authorization: `token ${token}`
       }
     });
-    console.log(response.data.avatar_url)
     return response.data.avatar_url;
   } catch (error) {
     console.error('Error fetching profile:', error);
+    return '';
   }
 };
 
-const navItems = ['Profile', 'Repositories'];
+const navItems = ['Profile', 'Repositories', 'Other Users'];
 
 export default function MenuAppBar() {
   const [auth, setAuth] = React.useState(localStorage.getItem('access_token'));
@@ -37,8 +39,10 @@ export default function MenuAppBar() {
   const location = useLocation();
 
   React.useEffect(() => {
-    fetchProfileAvatar().then(r => setAvatar(r));
-  }, [location.pathname]);
+    if (auth) {
+      fetchProfileAvatar().then(setAvatar);
+    }
+  }, [location.pathname, auth]);
 
   React.useEffect(() => {
     const handleStorageChange = () => {
@@ -52,11 +56,9 @@ export default function MenuAppBar() {
     };
   }, []);
 
-  const token = localStorage.getItem('access_token');
-
   React.useEffect(() => {
-    setAuth(token);
-  }, [token]);
+    setAuth(localStorage.getItem('access_token'));
+  }, []);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -95,22 +97,26 @@ export default function MenuAppBar() {
                     {navItems.map((item) => (
                         <Button
                             key={item}
-                            onClick={() => navigate(`/${item.toLowerCase()}`)}
+                            onClick={() => navigate(`/${item.toLowerCase().replace(/\s+/g, '')}`)}
                             sx={{ color: '#fff' }}
                         >
                           {item}
                         </Button>
                     ))}
                   </Box>
-                  <Avatar alt="Avatar" src={avatar} size="large"
-                          aria-label="account of current user"
-                          aria-controls="menu-appbar"
-                          aria-haspopup="true"
-                          onClick={handleMenu}
-                          color="inherit"/>
+                  <Avatar
+                      alt="Avatar"
+                      src={avatar}
+                      size="large"
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      color="inherit"
+                  />
                   <Menu
                       id="menu-appbar"
-                      anchorEl={anchorEl} // исправлено: передача anchorEl
+                      anchorEl={anchorEl}
                       anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
@@ -122,9 +128,7 @@ export default function MenuAppBar() {
                       }}
                       open={Boolean(anchorEl)}
                       onClose={handleClose}
-                      sx={{
-                        marginTop: '2.5rem',
-                      }}
+                      sx={{ marginTop: '2.5rem' }}
                   >
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </Menu>
