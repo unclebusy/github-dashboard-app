@@ -1,33 +1,44 @@
 import React, { useState, useEffect } from "react";
-import {useNavigate} from "react-router-dom";
 import axios from "axios";
-import {Card, CardContent, Typography, Grid, Container, Box, CircularProgress, Button} from "@mui/material";
+import { Typography, Grid, Container, Box, CircularProgress, Button } from "@mui/material";
 import Pagination from '@mui/material/Pagination';
-import FolderIcon from '@mui/icons-material/Folder';
 import Toolbar from "@mui/material/Toolbar";
 import AppBar from "@mui/material/AppBar";
+import CardWithRepositories from "../components/CardWithRepositories";
 
 const Repositories = () => {
-  const [repositories, setRepositories] = useState([]);
+  const [publicRepositories, setPublicRepositories] = useState([]);
+  const [privateRepositories, setPrivateRepositories] = useState([]);
+  const [totalPublicPages, setTotalPublicPages] = useState(1);
+  const [totalPrivatePages, setTotalPrivatePages] = useState(1);
+  const [repositoriesType, setRepositoriesType] = useState('Public');
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-
-  const navigate = useNavigate();
 
   const reposPerPage = 9;
-  const displayedRepos = repositories.slice((page - 1) * reposPerPage, page * reposPerPage);
 
   const fetchRepositories = async () => {
     const token = localStorage.getItem('access_token');
+    if (!token) {
+      console.error('No access token found');
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+
     try {
-      const response = await axios.get('https://api.github.com/user', {
+      const { data: profile } = await axios.get('https://api.github.com/user', {
         headers: { Authorization: `token ${token}` }
       });
-      const profile = response.data;
-      const reposResponse = await axios.get(profile.repos_url);
-      setRepositories(reposResponse.data);
-      setTotalPages(Math.ceil(reposResponse.data.length / reposPerPage));
+      const { data: repos } = await axios.get(profile.repos_url);
+      const publicRepo = repos.filter(repo => !repo.private);
+      const privateRepo = repos.filter(repo => repo.private);
+
+      setPublicRepositories(publicRepo);
+      setPrivateRepositories(privateRepo);
+      setTotalPublicPages(Math.ceil(publicRepo.length / reposPerPage));
+      setTotalPrivatePages(Math.ceil(privateRepo.length / reposPerPage));
     } catch (error) {
       console.error('Error fetching repositories:', error);
     } finally {
@@ -35,73 +46,66 @@ const Repositories = () => {
     }
   };
 
-  const handlePageChange = (event, value) => {
-    setPage(value);
-  };
-
-  const handleGoToPublicRepositories = () => {
-    navigate('/repositories')
-  }
-
   useEffect(() => {
     fetchRepositories();
   }, []);
 
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
+  const handleChangeRepositoriesType = (type) => {
+    setRepositoriesType(type);
+    setPage(1);
+  };
+
+  const displayedRepos = (repositoriesType === 'Public' ? publicRepositories : privateRepositories).slice((page - 1) * reposPerPage, page * reposPerPage);
+
   return (
-      <Container style={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 64px)', padding: '2rem'}}>
-        {isLoading ?
+      <Container sx={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 64px)', padding: '2rem' }}>
+        {isLoading ? (
             <Container maxWidth="sm" sx={{ display: 'flex', height: 'calc(100vh - 64px)', alignItems: 'center', justifyContent: 'center' }}>
               <CircularProgress />
             </Container>
-            :
-            (
-              <>
-                <Box sx={{marginBottom: "2rem"}}>
-                  <AppBar position="static">
-                    <Toolbar>
-                      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Repositories
-                      </Typography>
-                      <Button color="inherit" onClick={handleGoToPublicRepositories}>Public</Button>
-                      <Button color="inherit">Private</Button>
-                    </Toolbar>
-                  </AppBar>
-                </Box>
-                <Grid container spacing={3}>
-                  {displayedRepos.map(repo => (
-                      <Grid item xs={12} sm={6} md={4} key={repo.id}>
-                        <Card>
-                          <CardContent>
-                            <Box  display='flex' alignItems='center' sx={{marginBottom: "0.5rem"}}>
-                              <FolderIcon color="primary"/>
-                              <Typography variant="h5" sx={{marginLeft: '0.5rem'}}>
-                                {repo.name}
-                              </Typography>
-                            </Box>
-                            <Typography variant="body2" color="textSecondary" noWrap style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              <a href={repo.html_url} target="_blank" rel="noopener noreferrer">{repo.html_url}</a>
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary" sx={{marginTop: "0.25rem"}}>
-                              Owner: {repo.owner.login}
-                            </Typography>
-                          </CardContent>
-                        </Card>
-                      </Grid>
-                  ))}
-                </Grid>
-                <Box mt="auto" display="flex" justifyContent="center" width="calc(100% - 64px)">
-                  <Pagination
-                      count={totalPages}
-                      page={page}
-                      onChange={handlePageChange}
-                      color="primary"
-                      style={{ marginTop: '20px', marginBottom: "20px" }}
-                  />
-                </Box>
-              </>
-          )}
-        </Container>
-    );
+        ) : (
+            <>
+              <Box sx={{ marginBottom: "2rem" }}>
+                <AppBar position="static">
+                  <Toolbar>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                      Repositories
+                    </Typography>
+                    <Button variant={repositoriesType === 'Public' ? "outlined" : "text"} color="inherit" onClick={() => handleChangeRepositoriesType('Public')}>Public</Button>
+                    <Button variant={repositoriesType === 'Private' ? "outlined" : "text"} color="inherit" onClick={() => handleChangeRepositoriesType('Private')}>Private</Button>
+                  </Toolbar>
+                </AppBar>
+              </Box>
+              <Grid container spacing={3}>
+                {displayedRepos.length > 0 ? (
+                    displayedRepos.map(repo => (
+                        <Grid item xs={12} sm={6} md={4} key={repo.id}>
+                          <CardWithRepositories name={repo.name} url={repo.html_url} owner={repo.owner.login} />
+                        </Grid>
+                    ))
+                ) : (
+                    <Grid item xs={12} sm={6} md={4}>
+                      <CardWithRepositories name={'Repositories not found'} />
+                    </Grid>
+                )}
+              </Grid>
+              <Box mt="auto" display="flex" justifyContent="center" width="calc(100% - 64px)">
+                <Pagination
+                    count={repositoriesType === 'Public' ? totalPublicPages : totalPrivatePages}
+                    page={page}
+                    onChange={handlePageChange}
+                    color="primary"
+                    sx={{ marginTop: '2rem' }}
+                />
+              </Box>
+            </>
+        )}
+      </Container>
+  );
 }
 
 export default Repositories;
