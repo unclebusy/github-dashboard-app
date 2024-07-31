@@ -6,6 +6,7 @@ import OAuthCallback from "./pages/OAuthCallback";
 import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
 import Repositories from "./pages/Repositories";
+import OtherUsers from "./pages/OtherUsers";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/oauth/callback" element={<OAuthCallback />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/repositories" element={<Repositories />}></Route>
+          <Route path="/otherusers" element={<OtherUsers />}></Route>
         </Routes>
       </BrowserRouter>
   );

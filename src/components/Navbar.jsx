@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,7 +10,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { Avatar, Button } from "@mui/material";
-import axios from "axios";
 
 const fetchProfileAvatar = async () => {
   const token = localStorage.getItem('access_token');
@@ -37,6 +37,7 @@ export default function MenuAppBar() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const locationPathname = location.pathname;
 
   React.useEffect(() => {
     if (auth) {
@@ -94,15 +95,19 @@ export default function MenuAppBar() {
             {auth && (
                 <>
                   <Box sx={{ display: { xs: 'none', sm: 'block' }, marginRight: '1rem' }}>
-                    {navItems.map((item) => (
+                    {navItems.map((item) => {
+                      const itemPathname = `/${item.toLowerCase().replace(/\s+/g, '')}`;
+
+                      return (
                         <Button
                             key={item}
-                            onClick={() => navigate(`/${item.toLowerCase().replace(/\s+/g, '')}`)}
-                            sx={{ color: '#fff' }}
+                            variant={locationPathname === itemPathname ? "contained" : "text"}
+                            color={locationPathname === itemPathname ? "primary" : "inherit"}
+                            onClick={() => navigate(itemPathname)}
                         >
                           {item}
                         </Button>
-                    ))}
+                    )})}
                   </Box>
                   <Avatar
                       alt="Avatar"
