@@ -13,12 +13,14 @@ import {
 import PaperWrapper from "../components/PaperWrapper";
 import CardSearchUser from "../components/CardSearchUser";
 import ProgressBar from "../components/ProgressBar";
+import ModalSearchedReposUser from "../components/ModalSearchedReposUser";
 
 const UserSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [repos, setRepos] = useState([]);
+  const [showUserRepos, setShowUserRepos] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 21;
@@ -49,23 +51,28 @@ const UserSearch = () => {
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
-
   const fetchUserRepos = async (username) => {
     setLoading(true);
 
     try {
       const response = await axios.get(`https://api.github.com/users/${username}/repos`);
       setRepos(response.data);
+      setShowUserRepos(true);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  const handleClose = () => {
+    setShowUserRepos(false);
   };
 
   const handlePageChange = (event, value) => {
@@ -128,20 +135,7 @@ const UserSearch = () => {
             </Box>
         ) : ''
         }
-
-        {repos.length > 0 ?
-            (<>
-              <Typography variant="h6">Repositories:</Typography>
-              <List>
-                {repos.map(repo => (
-                    <ListItem key={repo.id}>
-                      <Link href={repo.html_url} target="_blank" rel="noopener">
-                        {repo.name}
-                      </Link>
-                    </ListItem>
-                ))}
-              </List>
-            </>) : ''}
+        <ModalSearchedReposUser showUserRepos={showUserRepos} handleClose={handleClose} repos={repos}/>
       </Container>
   );
 };

@@ -17,7 +17,7 @@ const Repositories = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
 
-  const reposPerPage = 9;
+  const reposPerPage = 12;
 
   const fetchRepositories = async () => {
     const token = localStorage.getItem('access_token');
@@ -64,13 +64,13 @@ const Repositories = () => {
   const displayedRepos = (repositoriesType === 'Public' ? publicRepositories : privateRepositories).slice((page - 1) * reposPerPage, page * reposPerPage);
 
   return (
-      <Container sx={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 64px)', padding: '2rem' }}>
+      <Container sx={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 64px)', maxHeight: 'calc(100vh - 64px)', padding: '0.5rem' }}>
         {isLoading ? (
             <ProgressBar />
         ) : (
             <>
-              <Box sx={{ marginBottom: "2rem"}}>
-                <AppBar position="static" sx={{ borderRadius: '4px' }}>
+              <PaperWrapper marginTop="1rem" padding="1rem">
+                <AppBar color="primary" position="static" sx={{ borderRadius: '4px', marginBottom: '1rem' }}>
                   <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       Repositories
@@ -80,29 +80,27 @@ const Repositories = () => {
                   </Toolbar>
                 </AppBar>
 
-                <PaperWrapper>
-                  <Grid container spacing={3}>
-                    {displayedRepos.length > 0 ? (
-                        displayedRepos.map(repo => (
-                            <Grid item xs={12} sm={6} md={4} key={repo.id}>
-                              <CardWithRepositories name={repo.name} url={repo.html_url} owner={repo.owner.login} />
-                            </Grid>
-                        ))
-                    ) : (
-                        <Grid item xs={12}>
-                          <CardWithRepositories name={'Repositories not found'} />
-                        </Grid>
-                    )}
-                  </Grid>
-                </PaperWrapper>
-              </Box>
+                <Grid container spacing={3}>
+                  {displayedRepos.length > 0 ? (
+                      displayedRepos.map(repo => (
+                          <Grid item xs={12} sm={6} md={4} key={repo.id}>
+                            <CardWithRepositories name={repo.name} url={repo.html_url} owner={repo.owner.login} />
+                          </Grid>
+                      ))
+                  ) : (
+                      <Grid item xs={12}>
+                        <CardWithRepositories name={'Repositories not found'} />
+                      </Grid>
+                  )}
+                </Grid>
+              </PaperWrapper>
               <Box mt="auto" display="flex" justifyContent="center">
                 <Pagination
                     count={repositoriesType === 'Public' ? totalPublicPages : totalPrivatePages}
                     page={page}
                     onChange={handlePageChange}
                     color="primary"
-                    sx={{ marginTop: '2rem' }}
+                    sx={{ marginBottom: '1rem' }}
                 />
               </Box>
             </>

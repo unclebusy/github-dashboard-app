@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, Typography, Modal, TextField, Button } from '@mui/material';
 
-const ModalEditProfile = ({ open, handleClose, editedProfile, setEditedProfile, handleSaveProfile }) => {
+const ModalEditProfile = ({ openEditor, handleClose, editedProfile, setEditedProfile, handleSaveProfile }) => {
   return (
       <Modal
-          open={open}
+          open={openEditor}
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
@@ -16,7 +16,8 @@ const ModalEditProfile = ({ open, handleClose, editedProfile, setEditedProfile, 
           transform: 'translate(-50%, -50%)',
           width: 400,
           bgcolor: 'background.paper',
-          border: '2px solid #000',
+          border: '1px solid #000',
+          borderRadius: '4px',
           boxShadow: 24,
           p: 4,
         }}>

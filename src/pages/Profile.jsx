@@ -31,7 +31,7 @@ const InfoItem = ({ title, icon: Icon, value }) => (
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [openEditor, setOpenEditor] = useState(false);
   const [editedProfile, setEditedProfile] = useState({});
   const navigate = useNavigate();
 
@@ -46,16 +46,16 @@ const Profile = () => {
 
   const handleEditProfile = () => {
     setEditedProfile(profile);
-    setOpen(true);
+    setOpenEditor(true);
   };
 
   const handleSaveProfile = () => {
     setProfile(editedProfile);
-    setOpen(false);
+    setOpenEditor(false);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenEditor(false);
   };
 
   if (!profile) {
@@ -102,7 +102,7 @@ const Profile = () => {
         </Container>
 
         <ModalEditProfile
-            open={open}
+            openEditor={openEditor}
             handleClose={handleClose}
             editedProfile={editedProfile}
             setEditedProfile={setEditedProfile}
