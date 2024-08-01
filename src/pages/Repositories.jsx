@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Typography, Grid, Container, Box, CircularProgress, Button } from "@mui/material";
+import {Typography, Grid, Container, Box, CircularProgress, Button} from "@mui/material";
 import Pagination from '@mui/material/Pagination';
 import Toolbar from "@mui/material/Toolbar";
 import AppBar from "@mui/material/AppBar";
 import CardWithRepositories from "../components/CardWithRepositories";
+import PaperWrapper from "../components/PaperWrapper";
 
 const Repositories = () => {
   const [publicRepositories, setPublicRepositories] = useState([]);
@@ -69,8 +70,8 @@ const Repositories = () => {
             </Container>
         ) : (
             <>
-              <Box sx={{ marginBottom: "2rem" }}>
-                <AppBar position="static">
+              <Box sx={{ marginBottom: "2rem"}}>
+                <AppBar position="static" sx={{ borderRadius: '4px' }}>
                   <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       Repositories
@@ -79,20 +80,23 @@ const Repositories = () => {
                     <Button variant={repositoriesType === 'Private' ? "outlined" : "text"} color="inherit" onClick={() => handleChangeRepositoriesType('Private')}>Private</Button>
                   </Toolbar>
                 </AppBar>
-              </Box>
-              <Grid container spacing={3}>
-                {displayedRepos.length > 0 ? (
-                    displayedRepos.map(repo => (
-                        <Grid item xs={12} sm={6} md={4} key={repo.id}>
-                          <CardWithRepositories name={repo.name} url={repo.html_url} owner={repo.owner.login} />
+
+                <PaperWrapper>
+                  <Grid container spacing={3}>
+                    {displayedRepos.length > 0 ? (
+                        displayedRepos.map(repo => (
+                            <Grid item xs={12} sm={6} md={4} key={repo.id}>
+                              <CardWithRepositories name={repo.name} url={repo.html_url} owner={repo.owner.login} />
+                            </Grid>
+                        ))
+                    ) : (
+                        <Grid item xs={12}>
+                          <CardWithRepositories name={'Repositories not found'} />
                         </Grid>
-                    ))
-                ) : (
-                    <Grid item xs={12} sm={6} md={4}>
-                      <CardWithRepositories name={'Repositories not found'} />
-                    </Grid>
-                )}
-              </Grid>
+                    )}
+                  </Grid>
+                </PaperWrapper>
+              </Box>
               <Box mt="auto" display="flex" justifyContent="center" width="calc(100% - 64px)">
                 <Pagination
                     count={repositoriesType === 'Public' ? totalPublicPages : totalPrivatePages}

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Typography, Avatar, Link, Box, Paper, Button, Tooltip, CircularProgress } from '@mui/material';
+import { Container, Typography, Avatar, Link, Box, Button, Tooltip, CircularProgress } from '@mui/material';
 import { Email as EmailIcon, Business as BusinessIcon, LocationOn as LocationOnIcon, AccountBox as AccountBoxIcon, Description as DescriptionIcon, Link as LinkIcon, EditNote as EditNoteIcon } from '@mui/icons-material';
 import ModalEditProfile from "../components/ModalEditProfile";
+import PaperWrapper from "../components/PaperWrapper";
 
 const fetchProfile = async () => {
   const token = localStorage.getItem('access_token');
@@ -68,16 +69,7 @@ const Profile = () => {
   return (
       <>
         <Container maxWidth="sm" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 'calc(100vh - 64px)' }}>
-          <Paper
-              elevation={3}
-              sx={{
-                borderRadius: '8px',
-                padding: 4,
-                textAlign: 'center',
-                backgroundColor: '#f9f9f9',
-                width: '100%',
-              }}
-          >
+          <PaperWrapper textAlign="cener" width="100%">
             <Box display="flex" flexDirection="column" alignItems="center">
               <Avatar src={profile.avatar_url || "https://www.gravatar.com/avatar"} alt="avatar" sx={{ width: 150, height: 150, marginBottom: 2 }} />
               <Typography variant="h4" component="h1" gutterBottom>
@@ -106,7 +98,7 @@ const Profile = () => {
                 </Box>
               </Box>
             </Box>
-          </Paper>
+          </PaperWrapper>
         </Container>
 
         <ModalEditProfile

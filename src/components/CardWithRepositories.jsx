@@ -3,9 +3,14 @@ import { Box, Card, CardContent, Typography, Link } from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
 
 const CardWithRepositories = ({ name, url, owner }) => {
+  const cardStyle = {
+    width: name !== 'Repositories not found' ? "auto" : "fit-content",
+    minWidth: 200,
+  }
+
   return (
-      <Card>
-        <CardContent>
+      <Card sx={cardStyle}>
+        <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: 2 }}>
           <Box display="flex" alignItems="center" mb={0.5}>
             <FolderIcon color="primary" />
             <Typography variant="h5" ml={0.5}>
