@@ -97,7 +97,7 @@ const Repositories = () => {
                   </Grid>
                 </PaperWrapper>
               </Box>
-              <Box mt="auto" display="flex" justifyContent="center" width="calc(100% - 64px)">
+              <Box mt="auto" display="flex" justifyContent="center">
                 <Pagination
                     count={repositoriesType === 'Public' ? totalPublicPages : totalPrivatePages}
                     page={page}

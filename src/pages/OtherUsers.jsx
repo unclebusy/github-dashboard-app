@@ -9,7 +9,7 @@ import {
   Container,
   Link,
   CircularProgress,
-  Box, Grid
+  Box, Grid, Pagination
 } from '@mui/material';
 import PaperWrapper from "../components/PaperWrapper";
 import CardSearchUser from "../components/CardSearchUser";
@@ -20,8 +20,10 @@ const UserSearch = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 21;
 
-  const handleSearch = async () => {
+  const handleSearch = async (page = 1) => {
     if (!searchTerm.trim()) {
       alert('Search query cannot be empty');
       return;
@@ -33,18 +35,19 @@ const UserSearch = () => {
       const response = await axios.get('https://api.github.com/search/users', {
         params: {
           q: searchTerm,
-          per_page: 21
+          per_page: itemsPerPage,
+          page
         }
       });
       setUsers(response.data.items);
       setTotalCount(response.data.total_count);
+      setCurrentPage(page);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -65,6 +68,10 @@ const UserSearch = () => {
     }
   };
 
+  const handlePageChange = (event, value) => {
+    handleSearch(value);
+  };
+
   return (
       <Container>
         <Box display="flex" alignItems="center" mb={2}>
@@ -78,7 +85,7 @@ const UserSearch = () => {
               sx={{ marginRight: '1rem', marginTop: '1rem', }}
           />
 
-          <Button variant="contained" color="primary" onClick={handleSearch}>
+          <Button variant="contained" color="primary" onClick={() => handleSearch()}>
             Search
           </Button>
         </Box>
@@ -103,20 +110,32 @@ const UserSearch = () => {
                   </nav>
                 </Box>
               </PaperWrapper>
+              <Box mt="auto" display="flex" justifyContent="center">
+                <Pagination
+                    count={Math.ceil(totalCount / itemsPerPage)}
+                    page={currentPage}
+                    onChange={handlePageChange}
+                    color="primary"
+                    sx={{ marginTop: '1.5rem' }}
+                />
+              </Box>
             </Box>
-          ) : ''
+        ) : ''
         }
 
-        <Typography variant="h6">Repositories:</Typography>
-        <List>
-          {repos.map(repo => (
-              <ListItem key={repo.id}>
-                <Link href={repo.html_url} target="_blank" rel="noopener">
-                  {repo.name}
-                </Link>
-              </ListItem>
-          ))}
-        </List>
+        {repos.length > 0 ?
+            (<>
+              <Typography variant="h6">Repositories:</Typography>
+              <List>
+                {repos.map(repo => (
+                    <ListItem key={repo.id}>
+                      <Link href={repo.html_url} target="_blank" rel="noopener">
+                        {repo.name}
+                      </Link>
+                    </ListItem>
+                ))}
+              </List>
+            </>) : ''}
       </Container>
   );
 };
