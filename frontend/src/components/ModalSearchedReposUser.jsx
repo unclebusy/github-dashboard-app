@@ -36,7 +36,7 @@ const ModalSearchedReposUser = ({showUserRepos, handleClose, repos}) => {
           <PaperWrapper padding='1rem' marginTop="1rem">
             <PaperWrapper padding="1rem" marginTop="0" marginBottom="1rem" bgColor="#1976D2" >
               <Typography color="white" variant="h6" component="div" sx={{flexGrow: 1}}>
-                Users repositories found: {repos.length}
+                Repositories found: {repos.length}
               </Typography>
             </PaperWrapper>
             <Grid container spacing={3}>

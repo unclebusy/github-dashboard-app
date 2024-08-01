@@ -3,11 +3,8 @@ import axios from 'axios';
 import {
   TextField,
   Button,
-  List,
-  ListItem,
   Typography,
   Container,
-  Link,
   Box, Grid, Pagination
 } from '@mui/material';
 import PaperWrapper from "../components/PaperWrapper";

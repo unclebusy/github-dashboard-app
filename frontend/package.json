@@ -1,5 +1,5 @@
 {
-  "name": "github-dashboard-app",
+  "name": "github-dashboard-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -11,11 +11,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.7.2",
-    "cors": "^2.8.5",
     "crypto-browserify": "^3.12.0",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "react": "^18.3.1",
@@ -29,8 +25,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "server": "node server.js"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -51,3 +46,4 @@
     ]
   }
 }
+
