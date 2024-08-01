@@ -5,19 +5,14 @@ import {
   Button,
   List,
   ListItem,
-  ListItemText,
   Typography,
   Container,
   Link,
   CircularProgress,
-  Box,
-  Avatar
+  Box, Grid
 } from '@mui/material';
 import PaperWrapper from "../components/PaperWrapper";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import InboxIcon from "@mui/icons-material/Inbox";
-import CardUser from "../components/CardUser";
+import CardSearchUser from "../components/CardSearchUser";
 
 const UserSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,18 +22,29 @@ const UserSearch = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
+    if (!searchTerm.trim()) {
+      alert('Search query cannot be empty');
+      return;
+    }
+
     setLoading(true);
-    const response = await axios.get('https://api.github.com/search/users', {
-      params: {
-        q: searchTerm,
-        per_page: 27
-      }
-    });
-    console.log(response.data.items)
-    setUsers(response.data.items);
-    setTotalCount(response.data.total_count);
-    setLoading(false);
+
+    try {
+      const response = await axios.get('https://api.github.com/search/users', {
+        params: {
+          q: searchTerm,
+          per_page: 21
+        }
+      });
+      setUsers(response.data.items);
+      setTotalCount(response.data.total_count);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -48,9 +54,15 @@ const UserSearch = () => {
 
   const fetchUserRepos = async (username) => {
     setLoading(true);
-    const response = await axios.get(`https://api.github.com/users/${username}/repos`);
-    setRepos(response.data);
-    setLoading(false);
+
+    try {
+      const response = await axios.get(`https://api.github.com/users/${username}/repos`);
+      setRepos(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -70,28 +82,30 @@ const UserSearch = () => {
             Search
           </Button>
         </Box>
-        {loading ? <CircularProgress /> : (
-            totalCount ? (
+        {loading && <CircularProgress />}
+        {totalCount ? (
+            <Box>
+              <PaperWrapper padding='1rem' marginTop="1rem">
+                <PaperWrapper padding="1rem" marginTop="0" marginBottom="1rem" bgColor="#1976D2" >
+                  <Typography color="white" variant="h6" component="div" sx={{flexGrow: 1}}>
+                    Found {totalCount} users
+                  </Typography>
+                </PaperWrapper>
                 <Box>
-                  <PaperWrapper padding='1rem' marginTop="1rem">
-                    <PaperWrapper padding="1rem" marginTop="0" bgColor="#1976D2">
-                      <Typography color="white" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Found {totalCount} users
-                      </Typography>
-                    </PaperWrapper>
-                    <Box>
-                      <nav aria-label="Count of users found">
-                        <List>
-                          {users.map(user => (
-                              <CardUser key={user.id} id={user.id} login={user.login} fetchUserRepos={fetchUserRepos}/>
-                          ))}
-                        </List>
-                      </nav>
-                    </Box>
-                  </PaperWrapper>
+                  <nav aria-label="Count of users found">
+                    <Grid container spacing={2}>
+                      {users.map(user => (
+                          <Grid item xs={12} sm={4} key={user.id}>
+                            <CardSearchUser id={user.id} login={user.login} avatar={user.avatar_url} fetchUserRepos={fetchUserRepos} />
+                          </Grid>
+                      ))}
+                    </Grid>
+                  </nav>
                 </Box>
-            ) : ''
-        )}
+              </PaperWrapper>
+            </Box>
+          ) : ''
+        }
 
         <Typography variant="h6">Repositories:</Typography>
         <List>

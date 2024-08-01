@@ -7,6 +7,7 @@ const PaperWrapper = (
       padding='2rem',
       bgColor='#f9f9f9',
       marginTop='2rem',
+      marginBottom='0',
       textAlign='',
       width="auto"}
 ) => {
@@ -19,6 +20,7 @@ const PaperWrapper = (
             padding: padding,
             backgroundColor: bgColor,
             marginTop: marginTop,
+            marginBottom: marginBottom,
             textAlign: textAlign,
             width: width,
           }}
