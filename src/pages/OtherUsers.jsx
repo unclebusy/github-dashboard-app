@@ -8,11 +8,11 @@ import {
   Typography,
   Container,
   Link,
-  CircularProgress,
   Box, Grid, Pagination
 } from '@mui/material';
 import PaperWrapper from "../components/PaperWrapper";
 import CardSearchUser from "../components/CardSearchUser";
+import ProgressBar from "../components/ProgressBar";
 
 const UserSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -73,8 +73,8 @@ const UserSearch = () => {
   };
 
   return (
-      <Container>
-        <Box display="flex" alignItems="center" mb={2}>
+      <Container sx={{ height: 'calc(100vh - 64px)' }}>
+        <Box display="flex" alignItems="flex-end" mb={2}>
           <TextField
               fullWidth
               variant="outlined"
@@ -82,14 +82,20 @@ const UserSearch = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search users..."
               onKeyDown={handleKeyPress}
-              sx={{ marginRight: '1rem', marginTop: '1rem', }}
+              sx={{ marginRight: '1rem', marginTop: '1rem', height: '40px' }}
+              InputProps={{sx: { height: '100%', boxSizing: 'border-box' },}}
           />
-
-          <Button variant="contained" color="primary" onClick={() => handleSearch()}>
+          <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleSearch()}
+              sx={{ height: '40px' }}
+          >
             Search
           </Button>
         </Box>
-        {loading && <CircularProgress />}
+
+        {loading && <ProgressBar />}
         {totalCount ? (
             <Box>
               <PaperWrapper padding='1rem' marginTop="1rem">
@@ -116,7 +122,7 @@ const UserSearch = () => {
                     page={currentPage}
                     onChange={handlePageChange}
                     color="primary"
-                    sx={{ marginTop: '1.5rem' }}
+                    sx={{ marginTop: '2rem' }}
                 />
               </Box>
             </Box>

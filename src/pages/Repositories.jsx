@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {Typography, Grid, Container, Box, CircularProgress, Button} from "@mui/material";
+import {Typography, Grid, Container, Box, Button} from "@mui/material";
 import Pagination from '@mui/material/Pagination';
 import Toolbar from "@mui/material/Toolbar";
 import AppBar from "@mui/material/AppBar";
 import CardWithRepositories from "../components/CardWithRepositories";
 import PaperWrapper from "../components/PaperWrapper";
+import ProgressBar from "../components/ProgressBar";
 
 const Repositories = () => {
   const [publicRepositories, setPublicRepositories] = useState([]);
@@ -65,9 +66,7 @@ const Repositories = () => {
   return (
       <Container sx={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 64px)', padding: '2rem' }}>
         {isLoading ? (
-            <Container maxWidth="sm" sx={{ display: 'flex', height: 'calc(100vh - 64px)', alignItems: 'center', justifyContent: 'center' }}>
-              <CircularProgress />
-            </Container>
+            <ProgressBar />
         ) : (
             <>
               <Box sx={{ marginBottom: "2rem"}}>
