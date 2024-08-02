@@ -1,12 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {Typography, Grid, Container, Box, Button} from "@mui/material";
+import { Typography, Grid, Container, Box, Button } from "@mui/material";
 import Pagination from '@mui/material/Pagination';
 import Toolbar from "@mui/material/Toolbar";
 import AppBar from "@mui/material/AppBar";
 import CardWithRepositories from "../components/CardWithRepositories";
 import PaperWrapper from "../components/PaperWrapper";
 import ProgressBar from "../components/ProgressBar";
+import useAccessToken from "../hooks/useAccessToken";
+import { useNavigate } from "react-router-dom";
+
+const fetchRepositories = async (accessToken, setPublicRepositories, setPrivateRepositories, setTotalPublicPages, setTotalPrivatePages, setIsLoading) => {
+  if (!accessToken) {
+    console.error('No access token found');
+    setIsLoading(false);
+    return;
+  }
+
+  setIsLoading(true);
+
+  try {
+    const { data: profile } = await axios.get('https://api.github.com/user', {
+      headers: { Authorization: `token ${accessToken}` }
+    });
+    const { data: repos } = await axios.get(profile.repos_url);
+    const publicRepo = repos.filter(repo => !repo.private);
+    const privateRepo = repos.filter(repo => repo.private);
+
+    setPublicRepositories(publicRepo);
+    setPrivateRepositories(privateRepo);
+    setTotalPublicPages(Math.ceil(publicRepo.length / 12));
+    setTotalPrivatePages(Math.ceil(privateRepo.length / 12));
+  } catch (error) {
+    console.error('Error fetching repositories:', error);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
 const Repositories = () => {
   const [publicRepositories, setPublicRepositories] = useState([]);
@@ -17,40 +47,16 @@ const Repositories = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
 
-  const reposPerPage = 12;
-
-  const fetchRepositories = async () => {
-    const token = localStorage.getItem('access_token');
-    if (!token) {
-      console.error('No access token found');
-      setIsLoading(false);
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      const { data: profile } = await axios.get('https://api.github.com/user', {
-        headers: { Authorization: `token ${token}` }
-      });
-      const { data: repos } = await axios.get(profile.repos_url);
-      const publicRepo = repos.filter(repo => !repo.private);
-      const privateRepo = repos.filter(repo => repo.private);
-
-      setPublicRepositories(publicRepo);
-      setPrivateRepositories(privateRepo);
-      setTotalPublicPages(Math.ceil(publicRepo.length / reposPerPage));
-      setTotalPrivatePages(Math.ceil(privateRepo.length / reposPerPage));
-    } catch (error) {
-      console.error('Error fetching repositories:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const accessToken = useAccessToken();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchRepositories();
-  }, []);
+    if (!accessToken) {
+      navigate('/');
+    } else {
+      fetchRepositories(accessToken, setPublicRepositories, setPrivateRepositories, setTotalPublicPages, setTotalPrivatePages, setIsLoading);
+    }
+  }, [accessToken, navigate]);
 
   const handlePageChange = (event, value) => {
     setPage(value);
@@ -61,7 +67,7 @@ const Repositories = () => {
     setPage(1);
   };
 
-  const displayedRepos = (repositoriesType === 'Public' ? publicRepositories : privateRepositories).slice((page - 1) * reposPerPage, page * reposPerPage);
+  const displayedRepos = (repositoriesType === 'Public' ? publicRepositories : privateRepositories).slice((page - 1) * 12, page * 12);
 
   return (
       <Container sx={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 64px)', maxHeight: 'calc(100vh - 64px)', padding: '0.5rem' }}>

@@ -1,18 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {
-  TextField,
-  Button,
-  Typography,
-  Container,
-  Box, Grid, Pagination
-} from '@mui/material';
+import useAccessToken from "../hooks/useAccessToken";
+import { useNavigate } from "react-router-dom";
+import { TextField, Button, Typography, Container, Box, Grid, Pagination } from '@mui/material';
 import PaperWrapper from "../components/PaperWrapper";
 import CardSearchUser from "../components/CardSearchUser";
 import ProgressBar from "../components/ProgressBar";
 import ModalSearchedReposUser from "../components/ModalSearchedReposUser";
 
-const UserSearch = () => {
+const OtherUsers = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -21,6 +17,15 @@ const UserSearch = () => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 21;
+
+  const accessToken = useAccessToken();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!accessToken) {
+      navigate('/');
+    }
+  }, [accessToken, navigate]);
 
   const handleSearch = async (page = 1) => {
     if (!searchTerm.trim()) {
@@ -87,7 +92,7 @@ const UserSearch = () => {
               placeholder="Search users..."
               onKeyDown={handleKeyPress}
               sx={{ marginRight: '1rem', marginTop: '1rem', height: '40px' }}
-              InputProps={{sx: { height: '100%', boxSizing: 'border-box' },}}
+              InputProps={{ sx: { height: '100%', boxSizing: 'border-box' } }}
           />
           <Button
               variant="contained"
@@ -103,8 +108,8 @@ const UserSearch = () => {
         {totalCount ? (
             <Box>
               <PaperWrapper padding='1rem' marginTop="1rem">
-                <PaperWrapper padding="1rem" marginTop="0" marginBottom="1rem" bgColor="#1976D2" >
-                  <Typography color="white" variant="h6" component="div" sx={{flexGrow: 1}}>
+                <PaperWrapper padding="1rem" marginTop="0" marginBottom="1rem" bgColor="#1976D2">
+                  <Typography color="white" variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     Found {totalCount} users
                   </Typography>
                 </PaperWrapper>
@@ -130,11 +135,10 @@ const UserSearch = () => {
                 />
               </Box>
             </Box>
-        ) : ''
-        }
-        <ModalSearchedReposUser showUserRepos={showUserRepos} handleClose={handleClose} repos={repos}/>
+        ) : ''}
+        <ModalSearchedReposUser showUserRepos={showUserRepos} handleClose={handleClose} repos={repos} />
       </Container>
   );
 };
 
-export default UserSearch;
+export default OtherUsers;

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import useAccessToken from "../hooks/useAccessToken";
 import { Container, Typography, Avatar, Link, Box, Button, Tooltip, CircularProgress } from '@mui/material';
 import { Email as EmailIcon, Business as BusinessIcon, LocationOn as LocationOnIcon, AccountBox as AccountBoxIcon, Description as DescriptionIcon, Link as LinkIcon, EditNote as EditNoteIcon } from '@mui/icons-material';
 import ModalEditProfile from "../components/ModalEditProfile";
 import PaperWrapper from "../components/PaperWrapper";
 
-const fetchProfile = async () => {
-  const token = localStorage.getItem('access_token');
+const fetchProfile = async (accessToken) => {
   try {
     const response = await axios.get('https://api.github.com/user', {
-      headers: { Authorization: `token ${token}` }
+      headers: { Authorization: `token ${accessToken}` }
     });
     return response.data;
   } catch (error) {
@@ -33,16 +33,16 @@ const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [openEditor, setOpenEditor] = useState(false);
   const [editedProfile, setEditedProfile] = useState({});
+  const accessToken = useAccessToken();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (!token) {
+    if (!accessToken) {
       navigate('/');
     } else {
-      fetchProfile().then(data => setProfile(data));
+      fetchProfile(accessToken).then(data => setProfile(data));
     }
-  }, [navigate]);
+  }, [accessToken, navigate]);
 
   const handleEditProfile = () => {
     setEditedProfile(profile);
@@ -69,7 +69,7 @@ const Profile = () => {
   return (
       <>
         <Container maxWidth="sm" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 'calc(100vh - 64px)' }}>
-          <PaperWrapper textAlign="cener" width="100%">
+          <PaperWrapper textAlign="center" width="100%">
             <Box display="flex" flexDirection="column" alignItems="center">
               <Avatar src={profile.avatar_url || "https://www.gravatar.com/avatar"} alt="avatar" sx={{ width: 150, height: 150, marginBottom: 2 }} />
               <Typography variant="h4" component="h1" gutterBottom>

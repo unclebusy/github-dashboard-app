@@ -1,25 +1,19 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAccessToken, setAccessToken } from '../store/slices/authSlice';
+import { AppBar, Box, Toolbar, Typography, IconButton, MenuItem, Menu, Avatar, Button } from "@mui/material";
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { Avatar, Button } from "@mui/material";
 
-const fetchProfileAvatar = async () => {
-  const token = localStorage.getItem('access_token');
+const navItems = ['Profile', 'Repositories', 'Other Users'];
+
+const fetchProfileAvatar = async (token) => {
   if (!token) return '';
 
   try {
     const response = await axios.get('https://api.github.com/user', {
-      headers: {
-        Authorization: `token ${token}`
-      }
+      headers: { Authorization: `token ${token}` }
     });
     return response.data.avatar_url;
   } catch (error) {
@@ -28,38 +22,15 @@ const fetchProfileAvatar = async () => {
   }
 };
 
-const navItems = ['Profile', 'Repositories', 'Other Users'];
-
 export default function MenuAppBar() {
-  const [auth, setAuth] = React.useState(localStorage.getItem('access_token'));
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [avatar, setAvatar] = React.useState('');
+  const dispatch = useDispatch();
+  const auth = useSelector(selectAccessToken);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [avatar, setAvatar] = useState('');
 
   const navigate = useNavigate();
   const location = useLocation();
   const locationPathname = location.pathname;
-
-  React.useEffect(() => {
-    if (auth) {
-      fetchProfileAvatar().then(setAvatar);
-    }
-  }, [location.pathname, auth]);
-
-  React.useEffect(() => {
-    const handleStorageChange = () => {
-      setAuth(localStorage.getItem('access_token'));
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
-
-  React.useEffect(() => {
-    setAuth(localStorage.getItem('access_token'));
-  }, []);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -71,9 +42,22 @@ export default function MenuAppBar() {
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
-    setAuth(null);
+    dispatch(setAccessToken(null));
     navigate('/');
   };
+
+  useEffect(() => {
+    if (auth) {
+      fetchProfileAvatar(auth).then(setAvatar);
+    }
+  }, [location.pathname, auth]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      dispatch(setAccessToken(token));
+    }
+  }, [dispatch]);
 
   return (
       <Box sx={{ flexGrow: 1, height: '100%' }}>
@@ -99,15 +83,15 @@ export default function MenuAppBar() {
                       const itemPathname = `/${item.toLowerCase().replace(/\s+/g, '')}`;
 
                       return (
-                        <Button
-                            key={item}
-                            variant={locationPathname === itemPathname ? "contained" : "text"}
-                            color={locationPathname === itemPathname ? "primary" : "inherit"}
-                            onClick={() => navigate(itemPathname)}
-                        >
-                          {item}
-                        </Button>
-                    )})}
+                          <Button
+                              key={item}
+                              variant={locationPathname === itemPathname ? "contained" : "text"}
+                              color={locationPathname === itemPathname ? "primary" : "inherit"}
+                              onClick={() => navigate(itemPathname)}
+                          >
+                            {item}
+                          </Button>
+                      )})}
                   </Box>
                   <Avatar
                       alt="Avatar"
@@ -118,6 +102,7 @@ export default function MenuAppBar() {
                       aria-haspopup="true"
                       onClick={handleMenu}
                       color="inherit"
+                      sx={{ cursor: 'pointer' }}
                   />
                   <Menu
                       id="menu-appbar"

@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const port = 4000;
 require('dotenv').config();
 
 const app = express();
@@ -30,6 +31,6 @@ app.post('/authenticate', async (req, res) => {
   }
 });
 
-app.listen(4000, () => {
+app.listen(port, () => {
   console.log('Server is running on http://localhost:4000');
 });

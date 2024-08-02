@@ -6,7 +6,7 @@ const CardWithRepositories = ({ name, url, owner }) => {
   const cardStyle = {
     width: name !== 'Repositories not found' ? "auto" : "fit-content",
     minWidth: 200,
-  }
+  };
 
   return (
       <Card sx={cardStyle}>
