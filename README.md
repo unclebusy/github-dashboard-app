@@ -1,5 +1,7 @@
 # GitHub Dashboard App
 
+[![Описание изображения](https://i.ibb.co/vzvZCqQ/Git-Hub-Dashboaed-App.jpg)](https://ibb.co/KyzFchL)
+
 ## Description
 
 A React application that integrates with the GitHub API to provide OAuth authentication. Once authenticated, users can view and edit their profile information, browse their repositories, and search for other GitHub users and their repositories.
