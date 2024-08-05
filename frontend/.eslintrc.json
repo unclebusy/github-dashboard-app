@@ -1,7 +1,8 @@
 {
     "extends": [
         "airbnb",
-        "airbnb/hooks"
+        "airbnb/hooks",
+        "plugin:prettier/recommended"
     ],
     "env": {
         "browser": true,
@@ -15,6 +16,7 @@
         "sourceType": "module"
     },
     "rules": {
+        "prettier/prettier": ["error"],
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
         "import/prefer-default-export": "off",
         "react/prop-types": "off",
@@ -24,4 +26,3 @@
         "no-console": ["error", { "allow": ["warn", "error"] }]
     }
 }
-

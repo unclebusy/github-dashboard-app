@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
-  Container, Typography, Avatar, Link, Box, Button, Tooltip, CircularProgress,
+  Container,
+  Typography,
+  Avatar,
+  Link,
+  Box,
+  Button,
+  Tooltip,
+  CircularProgress,
 } from '@mui/material';
 import {
   Email as EmailIcon,
@@ -34,9 +41,7 @@ function InfoItem({ title, icon: Icon, value }) {
     <Tooltip title={title} placement="left-start">
       <Box display="flex" alignItems="center" sx={{ marginBottom: 1 }}>
         <Icon sx={{ marginRight: 1, color: '#1976D2' }} />
-        <Typography variant="body1">
-          {value || 'N/A'}
-        </Typography>
+        <Typography variant="body1">{value || 'N/A'}</Typography>
       </Box>
     </Tooltip>
   );
@@ -76,7 +81,10 @@ function Profile() {
       <Container
         maxWidth="sm"
         sx={{
-          display: 'flex', height: 'calc(100vh - 64px)', alignItems: 'center', justifyContent: 'center',
+          display: 'flex',
+          height: 'calc(100vh - 64px)',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <CircularProgress />
@@ -89,12 +97,19 @@ function Profile() {
       <Container
         maxWidth="sm"
         sx={{
-          display: 'flex', alignItems: 'center', justifyContent: 'center', height: 'calc(100vh - 64px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: 'calc(100vh - 64px)',
         }}
       >
         <PaperWrapper textAlign="center" width="100%">
           <Box display="flex" flexDirection="column" alignItems="center">
-            <Avatar src={profile.avatar_url || 'https://www.gravatar.com/avatar'} alt="avatar" sx={{ width: 150, height: 150, marginBottom: 2 }} />
+            <Avatar
+              src={profile.avatar_url || 'https://www.gravatar.com/avatar'}
+              alt="avatar"
+              sx={{ width: 150, height: 150, marginBottom: 2 }}
+            />
             <Typography variant="h4" component="h1" gutterBottom>
               {profile.name}
             </Typography>

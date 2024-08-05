@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {
-  Typography, Grid, Container, Box, Button,
-} from '@mui/material';
+import { Typography, Grid, Container, Box, Button } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import Toolbar from '@mui/material/Toolbar';
 import AppBar from '@mui/material/AppBar';
@@ -18,7 +16,7 @@ const fetchRepositories = async (
   setPrivateRepositories,
   setTotalPublicPages,
   setTotalPrivatePages,
-  setIsLoading,
+  setIsLoading
 ) => {
   if (!accessToken) {
     console.error('No access token found');
@@ -69,7 +67,7 @@ function Repositories() {
         setPrivateRepositories,
         setTotalPublicPages,
         setTotalPrivatePages,
-        setIsLoading,
+        setIsLoading
       );
     }
   }, [accessToken, navigate]);
@@ -84,9 +82,7 @@ function Repositories() {
   };
 
   const displayedRepos = (
-    repositoriesType === 'Public'
-      ? publicRepositories
-      : privateRepositories
+    repositoriesType === 'Public' ? publicRepositories : privateRepositories
   ).slice((page - 1) * 12, page * 12);
 
   return (

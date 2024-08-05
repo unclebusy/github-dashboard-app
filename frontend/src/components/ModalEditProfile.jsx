@@ -1,10 +1,12 @@
 import React from 'react';
-import {
-  Box, Typography, Modal, TextField, Button,
-} from '@mui/material';
+import { Box, Typography, Modal, TextField, Button } from '@mui/material';
 
 function ModalEditProfile({
-  openEditor, handleClose, editedProfile, setEditedProfile, handleSaveProfile,
+  openEditor,
+  handleClose,
+  editedProfile,
+  setEditedProfile,
+  handleSaveProfile,
 }) {
   return (
     <Modal
@@ -13,18 +15,19 @@ function ModalEditProfile({
       aria-labelledby="edit-profile-title"
       aria-describedby="edit-profile-description"
     >
-      <Box sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '1px solid #000',
-        borderRadius: '4px',
-        boxShadow: 24,
-        p: 4,
-      }}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 400,
+          bgcolor: 'background.paper',
+          border: '1px solid #000',
+          borderRadius: '4px',
+          boxShadow: 24,
+          p: 4,
+        }}
       >
         <Typography id="edit-profile-title" variant="h6" component="h2">
           Edit Profile

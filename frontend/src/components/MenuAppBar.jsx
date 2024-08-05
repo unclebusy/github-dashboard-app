@@ -3,7 +3,15 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  AppBar, Box, Toolbar, Typography, IconButton, MenuItem, Menu, Avatar, Button,
+  AppBar,
+  Box,
+  Toolbar,
+  Typography,
+  IconButton,
+  MenuItem,
+  Menu,
+  Avatar,
+  Button,
 } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { selectAccessToken, setAccessToken } from '../store/slices/authSlice';

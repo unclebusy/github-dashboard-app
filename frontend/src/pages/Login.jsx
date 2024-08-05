@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Button, Container, Box, Typography,
-} from '@mui/material';
+import { Button, Container, Box, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import useAccessToken from '../hooks/useAccessToken';
 
@@ -53,7 +51,10 @@ function Login() {
     <Container
       maxWidth="sm"
       sx={{
-        display: 'flex', height: 'calc(100vh - 64px)', alignItems: 'center', justifyContent: 'center',
+        display: 'flex',
+        height: 'calc(100vh - 64px)',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       <LoginBox />

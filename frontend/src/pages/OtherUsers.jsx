@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import {
-  TextField, Button, Typography, Container, Box, Grid, Pagination,
-} from '@mui/material';
+import { TextField, Button, Typography, Container, Box, Grid, Pagination } from '@mui/material';
 import useAccessToken from '../hooks/useAccessToken';
 import PaperWrapper from '../components/PaperWrapper';
 import CardSearchUser from '../components/CardSearchUser';
@@ -113,11 +111,7 @@ function OtherUsers() {
           <PaperWrapper padding="1rem" marginTop="1rem">
             <PaperWrapper padding="1rem" marginTop="0" marginBottom="1rem" bgColor="#1976D2">
               <Typography color="white" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Found
-                {' '}
-                {totalCount}
-                {' '}
-                users
+                Found {totalCount} users
               </Typography>
             </PaperWrapper>
             <Box>
@@ -147,7 +141,9 @@ function OtherUsers() {
             />
           </Box>
         </Box>
-      ) : ''}
+      ) : (
+        ''
+      )}
       <ModalSearchedReposUser
         showUserRepos={showUserRepos}
         handleClose={handleClose}

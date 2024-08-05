@@ -6,7 +6,10 @@ function ProgressBar() {
     <Container
       maxWidth="sm"
       sx={{
-        display: 'flex', height: 'calc(100vh - 64px)', alignItems: 'center', justifyContent: 'center',
+        display: 'flex',
+        height: 'calc(100vh - 64px)',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       <CircularProgress />

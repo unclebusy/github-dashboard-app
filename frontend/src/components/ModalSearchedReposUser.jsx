@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Grid, Modal, Pagination, Typography, Box,
-} from '@mui/material';
+import { Grid, Modal, Pagination, Typography, Box } from '@mui/material';
 import PaperWrapper from './PaperWrapper';
 import CardWithRepositories from './CardWithRepositories';
 
@@ -38,10 +36,14 @@ function ModalSearchedReposUser({ showUserRepos, handleClose, repos }) {
       >
         <PaperWrapper padding="1rem" marginTop="1rem">
           <PaperWrapper padding="1rem" marginTop="0" marginBottom="1rem" bgColor="#1976D2">
-            <Typography id="modal-title" color="white" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Repositories found:
-              {' '}
-              {repos.length}
+            <Typography
+              id="modal-title"
+              color="white"
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1 }}
+            >
+              Repositories found: {repos.length}
             </Typography>
           </PaperWrapper>
           <Grid container spacing={3}>
