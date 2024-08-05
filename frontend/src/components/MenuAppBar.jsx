@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAccessToken, setAccessToken } from '../store/slices/authSlice';
-import { AppBar, Box, Toolbar, Typography, IconButton, MenuItem, Menu, Avatar, Button } from "@mui/material";
+import {
+  AppBar, Box, Toolbar, Typography, IconButton, MenuItem, Menu, Avatar, Button,
+} from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import { selectAccessToken, setAccessToken } from '../store/slices/authSlice';
 
 const navItems = ['Profile', 'Repositories', 'Other Users'];
 
@@ -13,7 +15,7 @@ const fetchProfileAvatar = async (token) => {
 
   try {
     const response = await axios.get('https://api.github.com/user', {
-      headers: { Authorization: `token ${token}` }
+      headers: { Authorization: `token ${token}` },
     });
     return response.data.avatar_url;
   } catch (error) {
@@ -60,72 +62,73 @@ export default function MenuAppBar() {
   }, [dispatch]);
 
   return (
-      <Box sx={{ flexGrow: 1, height: '100%' }}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 0 }}
-                onClick={() => navigate('/')}
-            >
-              <GitHubIcon />
-            </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              GitHub Dashboard
-            </Typography>
-            {auth && (
-                <>
-                  <Box sx={{ display: { xs: 'none', sm: 'block' }, marginRight: '1rem' }}>
-                    {navItems.map((item) => {
-                      const itemPathname = `/${item.toLowerCase().replace(/\s+/g, '')}`;
+    <Box sx={{ flexGrow: 1, height: '100%' }}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 0 }}
+            onClick={() => navigate('/')}
+          >
+            <GitHubIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            GitHub Dashboard
+          </Typography>
+          {auth && (
+            <>
+              <Box sx={{ display: { xs: 'none', sm: 'block' }, marginRight: '1rem' }}>
+                {navItems.map((item) => {
+                  const itemPathname = `/${item.toLowerCase().replace(/\s+/g, '')}`;
 
-                      return (
-                          <Button
-                              key={item}
-                              variant={locationPathname === itemPathname ? "contained" : "text"}
-                              color={locationPathname === itemPathname ? "primary" : "inherit"}
-                              onClick={() => navigate(itemPathname)}
-                          >
-                            {item}
-                          </Button>
-                      )})}
-                  </Box>
-                  <Avatar
-                      alt="Avatar"
-                      src={avatar}
-                      size="large"
-                      aria-label="account of current user"
-                      aria-controls="menu-appbar"
-                      aria-haspopup="true"
-                      onClick={handleMenu}
-                      color="inherit"
-                      sx={{ cursor: 'pointer' }}
-                  />
-                  <Menu
-                      id="menu-appbar"
-                      anchorEl={anchorEl}
-                      anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}
-                      keepMounted
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}
-                      open={Boolean(anchorEl)}
-                      onClose={handleClose}
-                      sx={{ marginTop: '2.5rem' }}
-                  >
-                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                  </Menu>
-                </>
-            )}
-          </Toolbar>
-        </AppBar>
-      </Box>
+                  return (
+                    <Button
+                      key={item}
+                      variant={locationPathname === itemPathname ? 'contained' : 'text'}
+                      color={locationPathname === itemPathname ? 'primary' : 'inherit'}
+                      onClick={() => navigate(itemPathname)}
+                    >
+                      {item}
+                    </Button>
+                  );
+                })}
+              </Box>
+              <Avatar
+                alt="Avatar"
+                src={avatar}
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+                sx={{ cursor: 'pointer' }}
+              />
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                sx={{ marginTop: '2.5rem' }}
+              >
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+            </>
+          )}
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 }

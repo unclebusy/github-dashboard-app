@@ -1,12 +1,17 @@
 import React from 'react';
-import { Box, Typography, Modal, TextField, Button } from '@mui/material';
+import {
+  Box, Typography, Modal, TextField, Button,
+} from '@mui/material';
 
-const ModalEditProfile = ({ openEditor, handleClose, editedProfile, setEditedProfile, handleSaveProfile }) => (
+function ModalEditProfile({
+  openEditor, handleClose, editedProfile, setEditedProfile, handleSaveProfile,
+}) {
+  return (
     <Modal
-        open={openEditor}
-        onClose={handleClose}
-        aria-labelledby="edit-profile-title"
-        aria-describedby="edit-profile-description"
+      open={openEditor}
+      onClose={handleClose}
+      aria-labelledby="edit-profile-title"
+      aria-describedby="edit-profile-description"
     >
       <Box sx={{
         position: 'absolute',
@@ -19,7 +24,8 @@ const ModalEditProfile = ({ openEditor, handleClose, editedProfile, setEditedPro
         borderRadius: '4px',
         boxShadow: 24,
         p: 4,
-      }}>
+      }}
+      >
         <Typography id="edit-profile-title" variant="h6" component="h2">
           Edit Profile
         </Typography>
@@ -27,39 +33,39 @@ const ModalEditProfile = ({ openEditor, handleClose, editedProfile, setEditedPro
           Update your profile information below.
         </Typography>
         <TextField
-            margin="normal"
-            fullWidth
-            label="Name"
-            value={editedProfile.name || ''}
-            onChange={(e) => setEditedProfile({ ...editedProfile, name: e.target.value })}
+          margin="normal"
+          fullWidth
+          label="Name"
+          value={editedProfile.name || ''}
+          onChange={(e) => setEditedProfile({ ...editedProfile, name: e.target.value })}
         />
         <TextField
-            margin="normal"
-            fullWidth
-            label="Email"
-            value={editedProfile.email || ''}
-            onChange={(e) => setEditedProfile({ ...editedProfile, email: e.target.value })}
+          margin="normal"
+          fullWidth
+          label="Email"
+          value={editedProfile.email || ''}
+          onChange={(e) => setEditedProfile({ ...editedProfile, email: e.target.value })}
         />
         <TextField
-            margin="normal"
-            fullWidth
-            label="Company"
-            value={editedProfile.company || ''}
-            onChange={(e) => setEditedProfile({ ...editedProfile, company: e.target.value })}
+          margin="normal"
+          fullWidth
+          label="Company"
+          value={editedProfile.company || ''}
+          onChange={(e) => setEditedProfile({ ...editedProfile, company: e.target.value })}
         />
         <TextField
-            margin="normal"
-            fullWidth
-            label="Location"
-            value={editedProfile.location || ''}
-            onChange={(e) => setEditedProfile({ ...editedProfile, location: e.target.value })}
+          margin="normal"
+          fullWidth
+          label="Location"
+          value={editedProfile.location || ''}
+          onChange={(e) => setEditedProfile({ ...editedProfile, location: e.target.value })}
         />
         <TextField
-            margin="normal"
-            fullWidth
-            label="Bio"
-            value={editedProfile.bio || ''}
-            onChange={(e) => setEditedProfile({ ...editedProfile, bio: e.target.value })}
+          margin="normal"
+          fullWidth
+          label="Bio"
+          value={editedProfile.bio || ''}
+          onChange={(e) => setEditedProfile({ ...editedProfile, bio: e.target.value })}
         />
         <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
           <Button variant="contained" color="success" onClick={handleSaveProfile}>
@@ -71,6 +77,7 @@ const ModalEditProfile = ({ openEditor, handleClose, editedProfile, setEditedPro
         </Box>
       </Box>
     </Modal>
-);
+  );
+}
 
 export default ModalEditProfile;

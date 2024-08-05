@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { CircularProgress, Container } from "@mui/material";
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CircularProgress, Container } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { setAccessToken } from '../store/slices/authSlice';
 
@@ -12,9 +12,9 @@ const fetchAccessToken = async (code, navigate, dispatch) => {
     const response = await fetch('http://localhost:4000/authenticate', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ code })
+      body: JSON.stringify({ code }),
     });
 
     if (!response.ok) {
@@ -30,7 +30,7 @@ const fetchAccessToken = async (code, navigate, dispatch) => {
   }
 };
 
-const OAuthCallback = () => {
+function OAuthCallback() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -44,10 +44,15 @@ const OAuthCallback = () => {
   }, [navigate, dispatch]);
 
   return (
-      <Container maxWidth="sm" sx={{ display: 'flex', height: 'calc(100vh - 64px)', alignItems: 'center', justifyContent: 'center' }}>
-        <CircularProgress />
-      </Container>
+    <Container
+      maxWidth="sm"
+      sx={{
+        display: 'flex', height: 'calc(100vh - 64px)', alignItems: 'center', justifyContent: 'center',
+      }}
+    >
+      <CircularProgress />
+    </Container>
   );
-};
+}
 
 export default OAuthCallback;

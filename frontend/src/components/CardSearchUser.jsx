@@ -1,7 +1,12 @@
-import React from "react";
-import { Avatar, ListItemText, ListItem, Tooltip, ListItemButton, ListItemIcon } from "@mui/material";
+import React from 'react';
+import {
+  Avatar, ListItemText, ListItem, Tooltip, ListItemButton, ListItemIcon,
+} from '@mui/material';
 
-const CardSearchUser = ({ id, login, avatar, fetchUserRepos }) => (
+function CardSearchUser({
+  id, login, avatar, fetchUserRepos,
+}) {
+  return (
     <Tooltip title="Click to view repositories" placement="top-start">
       <ListItem disablePadding key={id} onClick={() => fetchUserRepos(login)}>
         <ListItemButton>
@@ -12,6 +17,7 @@ const CardSearchUser = ({ id, login, avatar, fetchUserRepos }) => (
         </ListItemButton>
       </ListItem>
     </Tooltip>
-);
+  );
+}
 
 export default CardSearchUser;
