@@ -12,9 +12,9 @@ A React application that integrates with the GitHub API to provide OAuth authent
 
 - React
 - Redux Toolkit
-- Material-UI
-- Axios
 - React Router
+- Axios
+- Material-UI
 
 ### Backend
 
